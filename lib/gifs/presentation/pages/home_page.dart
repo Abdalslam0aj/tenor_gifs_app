@@ -24,11 +24,26 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            margin: const EdgeInsets.only(top: 10),
+            margin: const EdgeInsets.all( 10),
             child: SafeArea(
-              child: TextFormField(),
+              child: TextFormField(
+                decoration: const InputDecoration(                  
+                    hintText: 'search',
+                    suffix: Icon(
+                      Icons.search,
+                      size: 15,
+                    )),
+                onChanged: (String value) {
+                  gifProvider.search = value;
+                },
+                textInputAction: TextInputAction.search,
+                onFieldSubmitted: (String value) {
+                  gifProvider.getGifs();
+                },
+              ),
             ),
           ),
           const Expanded(child: GifGridView()),

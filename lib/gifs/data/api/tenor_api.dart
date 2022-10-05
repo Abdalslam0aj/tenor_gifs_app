@@ -22,14 +22,14 @@ class TenorApi {
         return GifResponse(error: true);
       }
     } catch (ex, st) {
-      log(ex.toString() + '' + st.toString());
+      log('$ex$st');
       return GifResponse(error: true);
     }
   }
 
   static Future getSearchResualtGifs(String search, String pos) async {
      try {
-      var uri = Uri.parse('${TenorEndPoints.baseUrl}${TenorEndPoints.searchEP}?key=${TenorEndPoints.key}&pos=$pos&limit=${AppConst.pageLimit}');
+      var uri = Uri.parse('${TenorEndPoints.baseUrl}${TenorEndPoints.searchEP}?q=$search&key=${TenorEndPoints.key}&pos=$pos&limit=${AppConst.pageLimit}');
       var response = await http.get(
         uri,
         headers: {'Content-Type': 'application/json'},

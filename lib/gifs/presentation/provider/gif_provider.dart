@@ -2,42 +2,56 @@ import 'package:flutter/cupertino.dart';
 import 'package:tenor_gif_app/gifs/data/model/gif_data.dart';
 import 'package:tenor_gif_app/gifs/data/model/gif_response.dart';
 import 'package:tenor_gif_app/gifs/domain/usecase/gif_usecase.dart';
+import 'package:tenor_gif_app/gifs/presentation/pages/gif_details_page.dart';
 
 class GifProvider extends ChangeNotifier {
   GifResponse? _gifResponse;
   String _search = '';
-  bool loading = false;
-  String get search => this._search;
+  bool _loading = false;
+  GifData? loadedGif;
 
-  set search(String value) {
-    _search = value;
+  bool get loading => _loading;
+
+  set loading(bool value) {
+    _loading = value;
     notifyListeners();
   }
 
-  GifResponse? get gifResponse => this._gifResponse;
+  String get search => _search;
 
-  set gifResponse(GifResponse? value) => this._gifResponse = value;
+  set search(String value) {
+    _search = value;
+    if (search.isEmpty) {
+      getGifs();
+    }
+  }
+
+  GifResponse? get gifResponse => _gifResponse;
+
+  set gifResponse(GifResponse? value) {
+    _gifResponse = value;
+  }
 
   Future<void> getTrendingGifs() async {
     gifResponse = null;
-    gifResponse = await GifUsecase.getTrendingGifs('');
+    _gifResponse = await GifUsecase.getTrendingGifs('');
     notifyListeners();
   }
 
   Future<void> getTrendingGifsPaging() async {
     if (gifResponse != null && gifResponse!.next != null) {
       List<GifData> gifData = gifResponse!.gifDataResults!;
-      gifResponse = await GifUsecase.getTrendingGifs(gifResponse!.next!);
-      gifData..addAll(gifResponse!.gifDataResults!);
-      gifResponse!.gifDataResults = gifData;
+      _gifResponse = await GifUsecase.getTrendingGifs(gifResponse!.next!);
+      gifData..addAll(_gifResponse!.gifDataResults!);
+      _gifResponse!.gifDataResults = gifData;
       notifyListeners();
     }
   }
 
   Future<void> getSearchResualtGifs() async {
     gifResponse = null;
-    gifResponse = await GifUsecase.getSearchResualtGifs(
-        search.trim(), gifResponse!.next!);
+    notifyListeners();
+    _gifResponse = await GifUsecase.getSearchResualtGifs(search.trim(), '');
     notifyListeners();
   }
 
@@ -70,5 +84,10 @@ class GifProvider extends ChangeNotifier {
       }
       loading = false;
     }
+  }
+
+  openDetailsPage(BuildContext context, GifData gifData) {
+    loadedGif = gifData;
+    Navigator.pushNamed(context, GifDetailsPage.id);
   }
 }

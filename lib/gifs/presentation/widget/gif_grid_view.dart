@@ -17,7 +17,6 @@ class _GifGridViewState extends State<GifGridView> {
   late GifProvider gifProvider;
 
   void _scrollListener() {
-    log(controller.position.toString());
     if (controller.position.extentAfter < 100) {
       gifProvider.getGifsPaging();
     }
@@ -41,21 +40,35 @@ class _GifGridViewState extends State<GifGridView> {
     return Consumer<GifProvider>(builder: (context, gifProvider, child) {
       if (gifProvider.gifResponse != null &&
           gifProvider.gifResponse!.gifDataResults != null) {
-        return GridView.builder(
-            shrinkWrap: true,
-            controller: controller,
-            itemCount: gifProvider.gifResponse!.gifDataResults!.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 2.0,
-                mainAxisSpacing: 2.0,
-                childAspectRatio: 0.9),
-            itemBuilder: (BuildContext context, int index) {
-              return GifCardWiget(
-                  gifData: gifProvider.gifResponse!.gifDataResults![index]);
-            });
+        return Stack(
+          alignment: AlignmentDirectional.bottomCenter,
+          children: [
+            GridView.builder(
+                shrinkWrap: true,
+                controller: controller,
+                itemCount: gifProvider.gifResponse!.gifDataResults!.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 2.0,
+                    mainAxisSpacing: 2.0,
+                    childAspectRatio: 0.9),
+                itemBuilder: (BuildContext context, int index) {
+                  return GifCardWiget(
+                      gifData: gifProvider.gifResponse!.gifDataResults![index]);
+                }),
+            if (gifProvider.loading)
+              const LinearProgressIndicator(
+                color: Colors.red,
+              )
+          ],
+        );
       } else {
-        return Center(child: CircularProgressIndicator());
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Center(child: CircularProgressIndicator()),
+          ],
+        );
       }
     });
   }
