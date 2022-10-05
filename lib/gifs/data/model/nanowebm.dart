@@ -10,7 +10,7 @@ class Nanowebm {
     url = json['url'];
     size = json['size'];
     dims = json['dims'].cast<int>();
-    preview = json['preview'];
+    preview = json['preview'].toString();
   }
 
   Map<String, dynamic> toJson() {

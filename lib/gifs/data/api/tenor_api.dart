@@ -21,8 +21,8 @@ class TenorApi {
       } else {
         return GifResponse(error: true);
       }
-    } catch (ex) {
-      log(ex.toString());
+    } catch (ex, st) {
+      log(ex.toString() + '' + st.toString());
       return GifResponse(error: true);
     }
   }

@@ -12,7 +12,7 @@ class Nanomp4 {
     preview = json['preview'];
     url = json['url'];
     size = json['size'];
-    duration = json['duration'];
+    duration = double.tryParse(json['duration'].toString()) ?? 0;
   }
 
   Map<String, dynamic> toJson() {

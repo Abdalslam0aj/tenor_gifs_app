@@ -1,5 +1,5 @@
 class AppConst {
   
-  static const String pageLimit = '10';
+  static const String pageLimit = '20';
 
 }

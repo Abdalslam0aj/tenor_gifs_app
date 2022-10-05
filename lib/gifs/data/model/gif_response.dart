@@ -16,7 +16,7 @@ class GifResponse {
         gifDataResults!.add(GifData.fromJson(v));
       });
     }
-    next = json['next'];
+    next = json['next'].toString();
   }
 
   Map<String, dynamic> toJson() {

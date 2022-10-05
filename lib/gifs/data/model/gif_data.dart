@@ -51,7 +51,7 @@ class GifData {
       });
     }
     bgColor = json['bg_color'];
-    created = json['created'];
+    created = double.tryParse(json['created'].toString()) ?? 0;
     itemurl = json['itemurl'];
     url = json['url'];
     if (json['tags'] != null) {
